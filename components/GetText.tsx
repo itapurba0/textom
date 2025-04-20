@@ -21,12 +21,9 @@ export const GetText: React.FC<GetTextProps> = ({ content }) => {
 
     return (
         <div className="container mx-auto mt-10">
-            {/* Retrieved Content Header */}
             <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
                 Retrieved Content:
             </h2>
-
-            {/* Content Box */}
             <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
                 <div className="bg-white rounded-lg p-6">
                     <textarea
@@ -38,8 +35,6 @@ export const GetText: React.FC<GetTextProps> = ({ content }) => {
                     />
                 </div>
             </div>
-
-            {/* Copy Button */}
             <div className="flex justify-center mt-6">
                 <button
                     onClick={handleCopy}
