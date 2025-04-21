@@ -7,7 +7,7 @@ export const TextInput = () => {
 
   return (
     <main className="container mx-auto mt-10">
-      {/* Header Section */}
+
       <div className="text-center mb-8">
         <h1 className="text-3xl font-extrabold text-gray-800 mb-2">
           Share Your Text
@@ -17,7 +17,6 @@ export const TextInput = () => {
         </p>
       </div>
 
-      {/* Text Input Section */}
       <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
         <div className="bg-white rounded-lg p-6">
           {code ? (
@@ -42,7 +41,7 @@ export const TextInput = () => {
             className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             rows={5}
             value={text}
-            onChange={handleTextChange} // Trigger sharing or updating on text change
+            onChange={handleTextChange}
             placeholder="Enter text to share"
           />
         </div>

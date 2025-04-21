@@ -6,11 +6,9 @@ import { FileGet, GetText } from "./index";
 export const CodeInput = () => {
   const { code, setCode, content, error } = useRetrieveContent();
   const [view, setView] = useState<"code" | "file">("code");
-
-  // Ensure the initial state is consistent between server and client
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setView("code"); // Default view
+      setView("code"); 
     }
   }, []);
 
@@ -25,17 +23,17 @@ export const CodeInput = () => {
         </p>
       </div>
 
-      {/* Toggle Buttons */}
+
       <div className="flex justify-center mb-6">
         <button
-          className={`px-4 py-2 rounded-l-lg ${view === "code" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+          className={`px-4 py-2 rounded-l-lg ${view === "code" ? "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white" : "bg-gray-200 text-gray-700"
             }`}
           onClick={() => setView("code")}
         >
           Get Text
         </button>
         <button
-          className={`px-4 py-2 rounded-r-lg ${view === "file" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+          className={`px-4 py-2 rounded-r-lg ${view === "file" ? "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white" : "bg-gray-200 text-gray-700"
             }`}
           onClick={() => setView("file")}
         >
@@ -43,7 +41,7 @@ export const CodeInput = () => {
         </button>
       </div>
 
-      {/* Conditional Rendering */}
+
       {view === "code" ? (
         <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
           <div className="bg-white rounded-lg p-6">
@@ -73,7 +71,6 @@ export const CodeInput = () => {
         <FileGet />
       )}
 
-      {/* Error Message */}
       {error && (
         <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
           <p className="text-center font-medium">{error}</p>

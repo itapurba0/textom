@@ -20,11 +20,9 @@ export const FileGet = () => {
                 const blob = await response.blob();
                 const url = window.URL.createObjectURL(blob);
 
-                // Create a temporary anchor element to trigger the download
                 const a = document.createElement("a");
                 a.href = url;
 
-                // Extract the filename from the Content-Disposition header
                 const contentDisposition = response.headers.get("Content-Disposition");
                 const filename = contentDisposition
                     ? contentDisposition.split("filename=")[1]?.replace(/"/g, "")
@@ -35,7 +33,7 @@ export const FileGet = () => {
                 a.click();
                 a.remove();
 
-                setError(""); // Clear any previous error
+                setError("");
             } else {
                 const errorData = await response.json();
                 setError(errorData.error || "Failed to download the file.");
@@ -49,7 +47,6 @@ export const FileGet = () => {
     return (
         <main className="container mx-auto mt-10">
 
-            {/* Input Section */}
             <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
                 <div className="bg-white rounded-lg p-6">
                     <label
@@ -75,7 +72,6 @@ export const FileGet = () => {
                 </div>
             </div>
 
-            {/* Error Message */}
             {error && (
                 <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
                     <p className="text-center font-medium">{error}</p>

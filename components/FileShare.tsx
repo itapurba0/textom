@@ -31,7 +31,7 @@ export const FileShare = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setCode(data.code); // Display the generated code
+        setCode(data.code); 
         setError("");
       } else {
         const errorData = await response.json();
@@ -45,7 +45,7 @@ export const FileShare = () => {
 
   return (
     <main className="container mx-auto mt-10">
-      {/* Header Section */}
+
       <div className="text-center mb-8">
         <h1 className="text-3xl font-extrabold text-gray-800 mb-2">
           Share Your File
@@ -55,7 +55,7 @@ export const FileShare = () => {
         </p>
       </div>
 
-      {/* File Upload Section */}
+
       <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
         <form
           className="bg-white rounded-lg p-6"
@@ -85,14 +85,13 @@ export const FileShare = () => {
         </form>
       </div>
 
-      {/* Error Message */}
+
       {error && (
         <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
           <p className="text-center font-medium">{error}</p>
         </div>
       )}
 
-      {/* Success Message */}
       {code && (
         <div className="mt-6 p-6 bg-green-100 rounded-lg shadow-lg">
           <h2 className="text-lg font-bold text-green-800 mb-2">

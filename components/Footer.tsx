@@ -2,12 +2,11 @@ export const Footer = () => {
     return (
         <footer className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white w-full py-6">
             <div className="container mx-auto text-center">
-                {/* Main Footer Text */}
+
                 <p className="text-sm font-medium">
                     &copy; {new Date().getFullYear()} TEXTOM. All rights reserved.
                 </p>
 
-                {/* Additional Footer Links */}
                 <div className="mt-4 flex justify-center space-x-6">
                     <a
                         href="/about"
@@ -29,7 +28,7 @@ export const Footer = () => {
                     </a>
                 </div>
 
-                {/* Social Media Icons */}
+
                 <div className="mt-4 flex justify-center space-x-4">
                     <a
                         href="https://twitter.com"

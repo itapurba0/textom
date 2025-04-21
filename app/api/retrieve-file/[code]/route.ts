@@ -3,7 +3,16 @@ import zlib from "zlib";
 import connectToDatabase from "@/lib/mongoose";
 import SharedFile from "@/model/SharedFile";
 
-export async function GET(req: Request, { params }: { params: { code: string } }) {
+
+interface RouteParams {
+    params: {
+        code: string;
+    };
+}
+
+export async function GET(req: Request, { params }: RouteParams) {
+    console.log("Params:", params);
+
     const { code } = params;
 
     try {
@@ -16,7 +25,6 @@ export async function GET(req: Request, { params }: { params: { code: string } }
 
         const decompressedFile = zlib.gunzipSync(file.fileData);
 
-        // Return the file as a downloadable response
         return new Response(decompressedFile, {
             headers: {
                 "Content-Type": file.mimeType,

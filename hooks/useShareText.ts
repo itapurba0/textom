@@ -6,7 +6,6 @@ export const useShareText = () => {
 
     const handleShare = async (newText: string) => {
         if (!code) {
-            // Generate a new code if one doesn't exist
             const response = await fetch("/api/share", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -15,7 +14,7 @@ export const useShareText = () => {
             const data = await response.json();
             setCode(data.code);
         } else {
-            // Update the content for the existing code
+
             await fetch(`/api/share/${code}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -27,7 +26,7 @@ export const useShareText = () => {
     const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const newText = e.target.value;
         setText(newText);
-        handleShare(newText); // Automatically share or update the text
+        handleShare(newText); 
     };
 
     return { text, setText, code, handleTextChange };

@@ -7,8 +7,8 @@ export const useRetrieveContent = () => {
 
     const handleRetrieve = async (currentCode: string) => {
         if (!currentCode.trim()) {
-            setContent(""); // Clear content if the code is empty
-            setError(""); // Clear any previous error
+            setContent(""); 
+            setError(""); 
             return;
         }
 
@@ -22,20 +22,19 @@ export const useRetrieveContent = () => {
             if (response.ok) {
                 const data = await response.json();
                 setContent(data.content);
-                setError(""); // Clear any previous error
+                setError(""); 
             } else {
                 const errorData = await response.json();
                 setError(errorData.error || "Something went wrong");
-                setContent(""); // Clear any previous content
+                setContent(""); 
             }
         } catch (err) {
             console.error("Error retrieving content:", err);
             setError("Failed to retrieve content. Please try again.");
-            setContent(""); // Clear any previous content
+            setContent(""); 
         }
     };
 
-    // Trigger handleRetrieve whenever the code changes
     useEffect(() => {
         if (code) {
             handleRetrieve(code);
