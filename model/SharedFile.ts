@@ -5,7 +5,7 @@ const SharedFileSchema = new Schema({
     fileData: { type: Buffer, required: true },
     mimeType: { type: String, required: true },
     fileName: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now, expires: 300 }, // TTL: 15 minutes
+    createdAt: { type: Date, default: Date.now, expires: 300 }, 
 });
 
 const SharedFile = models.SharedFile || model("SharedFile", SharedFileSchema);
