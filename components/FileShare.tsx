@@ -24,7 +24,7 @@ export const FileShare = () => {
     formData.append("file", file);
 
     try {
-      const response = await fetch("/api/share-file", {
+      const response = await fetch("/api/sharefile", {
         method: "POST",
         body: formData,
       });
