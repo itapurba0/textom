@@ -2,93 +2,108 @@
 import React, { useState } from "react";
 
 export const FileShare = () => {
-    const [file, setFile] = useState<File | null>(null);
-    const [code, setCode] = useState<string>("");
-    const [error, setError] = useState<string>("");
+  const [file, setFile] = useState<File | null>(null);
+  const [code, setCode] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setFile(e.target.files[0]);
-        }
-    };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFile(e.target.files[0]);
+    }
+  };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-        if (!file) {
-            setError("Please select a file to share.");
-            return;
-        }
+    if (!file) {
+      setError("Please select a file to share.");
+      return;
+    }
 
-        const formData = new FormData();
-        formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-        try {
-            const response = await fetch("/api/share-file", {
-                method: "POST",
-                body: formData,
-            });
+    try {
+      const response = await fetch("/api/share-file", {
+        method: "POST",
+        body: formData,
+      });
 
-            if (response.ok) {
-                const data = await response.json();
-                setCode(data.code); // Display the generated code
-                setError("");
-            } else {
-                const errorData = await response.json();
-                setError(errorData.error || "Something went wrong.");
-            }
-        } catch (err) {
-            console.error("Error uploading file:", err);
-            setError("Failed to upload the file. Please try again.");
-        }
-    };
+      if (response.ok) {
+        const data = await response.json();
+        setCode(data.code); // Display the generated code
+        setError("");
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || "Something went wrong.");
+      }
+    } catch (err) {
+      console.error("Error uploading file:", err);
+      setError("Failed to upload the file. Please try again.");
+    }
+  };
 
-    return (
-        <div className="container mx-auto mt-10">
-            <h1 className="text-2xl font-bold mb-4">Share Your File</h1>
-            <form
-                className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
-                onSubmit={handleSubmit}
+  return (
+    <main className="container mx-auto mt-10">
+      {/* Header Section */}
+      <div className="text-center mb-8">
+        <h1 className="text-3xl font-extrabold text-gray-800 mb-2">
+          Share Your File
+        </h1>
+        <p className="text-gray-600">
+          Upload your file and get a unique code to share it with others.
+        </p>
+      </div>
+
+      {/* File Upload Section */}
+      <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
+        <form
+          className="bg-white rounded-lg p-6"
+          onSubmit={handleSubmit}
+        >
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="file"
             >
-                <div className="mb-4">
-                    <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
-                        htmlFor="file"
-                    >
-                        File
-                    </label>
-                    <input
-                        type="file"
-                        name="file"
-                        id="file"
-                        onChange={handleFileChange}
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    />
-                </div>
-                <div className="mb-6">
-                    <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    >
-                        Share
-                    </button>
-                </div>
-            </form>
+              Select File
+            </label>
+            <input
+              type="file"
+              name="file"
+              id="file"
+              onChange={handleFileChange}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <button
+            type="submit"
+            className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+          >
+            Share
+          </button>
+        </form>
+      </div>
 
-            {error && (
-                <div className="mt-4 p-4 bg-red-100 text-red-700 rounded">
-                    <p>{error}</p>
-                </div>
-            )}
-
-            {code && (
-                <div className="mt-4 p-4 bg-green-100 text-green-700 rounded">
-                    <p>
-                        File shared successfully! Your code:{" "}
-                        <span className="font-bold text-blue-600">{code}</span>
-                    </p>
-                </div>
-            )}
+      {/* Error Message */}
+      {error && (
+        <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
+          <p className="text-center font-medium">{error}</p>
         </div>
-    );
+      )}
+
+      {/* Success Message */}
+      {code && (
+        <div className="mt-6 p-6 bg-green-100 rounded-lg shadow-lg">
+          <h2 className="text-lg font-bold text-green-800 mb-2">
+            File Shared Successfully!
+          </h2>
+          <p className="text-gray-700">
+            Your unique code:{" "}
+            <span className="font-bold text-blue-600">{code}</span>
+          </p>
+        </div>
+      )}
+    </main>
+  );
 };

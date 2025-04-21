@@ -1,11 +1,11 @@
-import {TextInput , Appbar } from "@/components/index"
+import { TextInput } from "@/components/index"
 
- const ShareText = () => {
+const ShareText = () => {
     return (
-        <><Appbar />
+        <>
             <TextInput />
         </>
     )
- }
+}
 
 export default ShareText;

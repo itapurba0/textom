@@ -47,15 +47,16 @@ export const FileGet = () => {
     };
 
     return (
-        <div className="container mx-auto mt-10">
-            <h1 className="text-2xl font-bold mb-4">Download Your File</h1>
-            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <div className="mb-4">
+        <main className="container mx-auto mt-10">
+
+            {/* Input Section */}
+            <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
+                <div className="bg-white rounded-lg p-6">
                     <label
                         className="block text-gray-700 text-sm font-bold mb-2"
                         htmlFor="code"
                     >
-                        Code
+                        Enter Code
                     </label>
                     <input
                         type="text"
@@ -63,24 +64,23 @@ export const FileGet = () => {
                         value={code}
                         onChange={(e) => setCode(e.target.value)}
                         placeholder="Enter your code"
-                        className="w-full p-2 border rounded"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
-                </div>
-                <div className="mb-6">
                     <button
                         onClick={handleDownload}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
                     >
                         Download
                     </button>
                 </div>
             </div>
 
+            {/* Error Message */}
             {error && (
-                <div className="mt-4 p-4 bg-red-100 text-red-700 rounded">
-                    <p>{error}</p>
+                <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
+                    <p className="text-center font-medium">{error}</p>
                 </div>
             )}
-        </div>
+        </main>
     );
 };

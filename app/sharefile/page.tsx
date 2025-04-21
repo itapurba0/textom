@@ -1,9 +1,8 @@
-import { FileShare ,Appbar} from "@/components/index";
+import { FileShare } from "@/components/index";
 
 const ShareFile = () => {
     return (
         <>
-            <Appbar />
             <FileShare />
         </>
     )

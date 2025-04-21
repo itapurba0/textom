@@ -14,7 +14,6 @@ export async function POST(req: Request) {
     try {
         await connectToDatabase();
 
-        // Generate a unique 4-digit code
         let code;
         do {
             code = Math.floor(1000 + Math.random() * 9000).toString(); // Generate a random 4-digit code

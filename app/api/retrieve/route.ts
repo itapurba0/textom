@@ -1,4 +1,4 @@
-// filepath: /home/apurba-roy/Developments/CODES/textom/app/api/retrieve/route.ts
+
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/lib/mongoose";
 import SharedText from "@/model/SharedText";

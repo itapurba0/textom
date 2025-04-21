@@ -1,21 +1,33 @@
 import Link from "next/link";
+import Image from "next/image";
 
-export const Appbar  = () => {
+export const Appbar = () => {
   return (
-    <header className="bg-gray-800 text-white p-4">
-          <nav className="container w-full  mx-auto ">
-            <ul className="flex space-x-4 justify-between">
-              <li>
-                <Link href="/" className="hover:text-gray-400">Home</Link>
-              </li>
-              <li>
-                <Link href="/sharetext" className="hover:text-gray-400">Share-Text</Link>
-              </li>
-              <li>
-                <Link href="/sharefile" className="hover:text-gray-400">Share-File</Link>
-              </li>
-            </ul>
+    <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-lg">
+      <nav className="container mx-auto flex justify-between items-center p-4">
+        {/* Logo and Title */}
+
+        <div className="text-2xl flex items-center space-x-2 font-bold tracking-wide">
+          <Image src="/logo.png" alt="Logo" width={50} height={50} />
+          <Link href="/" className="hover:text-gray-200">
+            TEXTOM
+          </Link>
+        </div>
+
+        {/* Navigation Links */}
+        <ul className="flex space-x-6 text-lg">
+          <li>
+            <Link href="/sharetext" className="hover:text-gray-200 transition duration-300">
+              Share Text
+            </Link>
+          </li>
+          <li>
+            <Link href="/sharefile" className="hover:text-gray-200 transition duration-300">
+              Share File
+            </Link>
+          </li>
+        </ul>
       </nav>
     </header>
   );
-}
+};
