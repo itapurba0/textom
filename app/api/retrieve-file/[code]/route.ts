@@ -3,19 +3,17 @@ import zlib from "zlib";
 import connectToDatabase from "@/lib/mongoose";
 import SharedFile from "@/model/SharedFile";
 
-
-interface RouteParams {
-    params: {
-        code: string;
-    };
-}
-
-export async function GET(req: Request, { params }: RouteParams) {
-    console.log("Params:", params);
-
-    const { code } = params;
-
+export async function GET(req: Request) {
     try {
+        const url = new URL(req.url);
+        const code = url.pathname.split("/").pop();
+
+        if (!code) {
+            return NextResponse.json({ error: "Code parameter is missing." }, { status: 400 });
+        }
+
+        console.log("Code:", code); 
+
         await connectToDatabase();
 
         const file = await SharedFile.findOne({ code });
