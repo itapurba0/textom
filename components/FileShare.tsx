@@ -31,7 +31,7 @@ export const FileShare = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setCode(data.code); 
+        setCode(data.code);
         setError("");
       } else {
         const errorData = await response.json();
@@ -54,8 +54,6 @@ export const FileShare = () => {
           Upload your file and get a unique code to share it with others.
         </p>
       </div>
-
-
       <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
         <form
           className="bg-white rounded-lg p-6"
