@@ -12,8 +12,6 @@ export async function GET(req: Request) {
             return NextResponse.json({ error: "Code parameter is missing." }, { status: 400 });
         }
 
-        console.log("Code:", code); 
-
         await connectToDatabase();
 
         const file = await SharedFile.findOne({ code });
@@ -30,9 +28,8 @@ export async function GET(req: Request) {
             },
         });
     } catch (error) {
-        console.error("Error retrieving file:", error);
         return NextResponse.json(
-            { error: "Failed to retrieve the file." },
+            { error: "Failed to retrieve the file." + error },
             { status: 500 }
         );
     }
