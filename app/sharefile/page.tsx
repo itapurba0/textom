@@ -1,9 +1,9 @@
-import { FileShare } from "@/components/index";
+import { ShareFilePage } from "@/components/index";
 
 const ShareFile = () => {
     return (
         <>
-            <FileShare />
+            <ShareFilePage />
         </>
     )
 }

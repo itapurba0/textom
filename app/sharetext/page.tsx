@@ -1,11 +1,7 @@
-import { TextInput } from "@/components/index"
+import { ShareTextPage } from "@/components/index"
 
 const ShareText = () => {
-    return (
-        <>
-            <TextInput />
-        </>
-    )
+    return <ShareTextPage />
 }
 
 export default ShareText;

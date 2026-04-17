@@ -7,8 +7,8 @@ export const useRetrieveContent = () => {
 
     const handleRetrieve = async (currentCode: string) => {
         if (!currentCode.trim()) {
-            setContent(""); 
-            setError(""); 
+            setContent("");
+            setError("");
             return;
         }
 
@@ -22,16 +22,16 @@ export const useRetrieveContent = () => {
             if (response.ok) {
                 const data = await response.json();
                 setContent(data.content);
-                setError(""); 
+                setError("");
             } else {
                 const errorData = await response.json();
                 setError(errorData.error || "Something went wrong");
-                setContent(""); 
+                setContent("");
             }
         } catch (err) {
             console.error("Error retrieving content:", err);
             setError("Failed to retrieve content. Please try again.");
-            setContent(""); 
+            setContent("");
         }
     };
 
@@ -41,5 +41,5 @@ export const useRetrieveContent = () => {
         }
     }, [code]);
 
-    return { code, setCode, content, error };
+    return { code, setCode, content, error, handleRetrieve };
 };

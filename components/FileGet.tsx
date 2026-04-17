@@ -45,30 +45,32 @@ export const FileGet = () => {
     };
 
     return (
-        <main className="container mx-auto mt-10">
-
+        <main className="w-full max-w-2xl">
             <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
-                <div className="bg-white rounded-lg p-6">
+                <div className="bg-white rounded-lg p-8">
                     <label
-                        className="block text-gray-700 text-sm font-bold mb-2"
+                        className="block text-gray-700 text-base font-semibold mb-4"
                         htmlFor="code"
                     >
                         Enter Code
                     </label>
-                    <input
-                        type="text"
-                        id="code"
-                        value={code}
-                        onChange={(e) => setCode(e.target.value)}
-                        placeholder="Enter your code"
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                    <button
-                        onClick={handleDownload}
-                        className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
-                    >
-                        Download
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <input
+                            type="text"
+                            id="code"
+                            value={code}
+                            onChange={(e) => setCode(e.target.value)}
+                            onKeyPress={(e) => e.key === "Enter" && handleDownload()}
+                            placeholder="Enter your code (e.g., 1234)"
+                            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        />
+                        <button
+                            onClick={handleDownload}
+                            className="px-6 py-3 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition duration-300 whitespace-nowrap"
+                        >
+                            Download
+                        </button>
+                    </div>
                 </div>
             </div>
 

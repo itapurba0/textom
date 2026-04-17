@@ -11,8 +11,10 @@
   "dependencies": {
     "@vercel/speed-insights": "^1.2.0",
     "clipboard": "^2.0.11",
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.8.0",
     "mongoose": "^8.13.2",
-    "next": "15.3.8",
+    "next": "^15.5.15",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "uuid": "^11.1.0"

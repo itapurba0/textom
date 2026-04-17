@@ -41,10 +41,10 @@ export default function RootLayout({
         )}
       </head>
       <body
-        className={`flex flex-col min-h-screen ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`flex flex-col min-h-screen bg-white ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Appbar />
-        <main className="flex-grow">
+        <main className="flex-1 flex flex-col">
           {children}
           <SpeedInsights />
         </main>

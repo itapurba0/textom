@@ -1,28 +1,28 @@
 export const Footer = () => {
     return (
-        <footer className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white w-full py-6">
+        <footer className="bg-gray-50 border-t border-gray-200 w-full py-8">
             <div className="container mx-auto text-center">
 
-                <p className="text-sm font-medium">
+                <p className="text-sm font-medium text-gray-700">
                     &copy; {new Date().getFullYear()} TEXTOM. All rights reserved.
                 </p>
 
                 <div className="mt-4 flex justify-center space-x-6">
                     <a
                         href="/about"
-                        className="text-white hover:text-gray-200 transition duration-300"
+                        className="text-gray-600 hover:text-blue-500 transition duration-300 font-medium"
                     >
                         About
                     </a>
                     <a
                         href="/privacy"
-                        className="text-white hover:text-gray-200 transition duration-300"
+                        className="text-gray-600 hover:text-blue-500 transition duration-300 font-medium"
                     >
                         Privacy Policy
                     </a>
                     <a
                         href="/contact"
-                        className="text-white hover:text-gray-200 transition duration-300"
+                        className="text-gray-600 hover:text-blue-500 transition duration-300 font-medium"
                     >
                         Contact
                     </a>
@@ -34,7 +34,7 @@ export const Footer = () => {
                         href="https://twitter.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-gray-200 transition duration-300"
+                        className="text-gray-400 hover:text-blue-500 transition duration-300"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +49,7 @@ export const Footer = () => {
                         href="https://facebook.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-gray-200 transition duration-300"
+                        className="text-gray-400 hover:text-blue-500 transition duration-300"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +64,7 @@ export const Footer = () => {
                         href="https://linkedin.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-gray-200 transition duration-300"
+                        className="text-gray-400 hover:text-blue-500 transition duration-300"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
