@@ -21,7 +21,7 @@ export async function GET(req: Request) {
 
         const decompressedFile = zlib.gunzipSync(file.fileData);
 
-        return new Response(decompressedFile, {
+        return new Response(new Uint8Array(decompressedFile), {
             headers: {
                 "Content-Type": file.mimeType,
                 "Content-Disposition": `attachment; filename="${file.fileName}"`,
