@@ -3,27 +3,19 @@ import connectToDatabase from "@/lib/mongoose";
 import SharedText from "@/model/SharedText";
 
 export async function POST(req: Request) {
+    const { content } = await req.json();
+
+    if (!content?.trim()) {
+        return NextResponse.json({ error: "Content required" }, { status: 400 });
+    }
+
+    const code = Math.floor(1000 + Math.random() * 9000).toString();
+
     try {
-        const { content } = await req.json();
-
-        if (!content || typeof content !== "string") {
-            return NextResponse.json(
-                { error: "Content is required and must be a string" },
-                { status: 400 }
-            );
-        }
-
-        const code = Math.floor(1000 + Math.random() * 9000).toString();
-
         await connectToDatabase();
         await SharedText.create({ code, content });
-
         return NextResponse.json({ code }, { status: 201 });
-    } catch (error) {
-        console.error("Error creating shared text:", error);
-        return NextResponse.json(
-            { error: "Failed to create shared text. Please try again." },
-            { status: 500 }
-        );
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        return NextResponse.json({ error: "Failed" }, { status: 500 });
     }
 }

@@ -5,32 +5,23 @@ import SharedFile from "@/model/SharedFile";
 
 export async function GET(req: Request) {
     try {
-        const url = new URL(req.url);
-        const code = url.pathname.split("/").pop();
-
-        if (!code) {
-            return NextResponse.json({ error: "Code parameter is missing." }, { status: 400 });
-        }
+        const code = new URL(req.url).pathname.split("/").pop();
+        if (!code) return NextResponse.json({ error: "No code" }, { status: 400 });
 
         await connectToDatabase();
 
         const file = await SharedFile.findOne({ code });
-        if (!file) {
-            return NextResponse.json({ error: "File not found or expired." }, { status: 404 });
-        }
+        if (!file) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-        const decompressedFile = zlib.gunzipSync(file.fileData);
+        const decompressed = zlib.gunzipSync(file.fileData);
 
-        return new Response(new Uint8Array(decompressedFile), {
+        return new Response(new Uint8Array(decompressed), {
             headers: {
                 "Content-Type": file.mimeType,
                 "Content-Disposition": `attachment; filename="${file.fileName}"`,
             },
         });
-    } catch (error) {
-        return NextResponse.json(
-            { error: "Failed to retrieve the file." + error },
-            { status: 500 }
-        );
+    } catch (_e) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        return NextResponse.json({ error: "Failed" }, { status: 500 });
     }
 }

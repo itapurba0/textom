@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import zlib from "zlib"; // Import zlib for compression
+import zlib from "zlib";
 import connectToDatabase from "@/lib/mongoose";
 import SharedFile from "@/model/SharedFile";
 
@@ -7,9 +7,7 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
-    if (!file) {
-        return NextResponse.json({ error: "No file uploaded." }, { status: 400 });
-    }
+    if (!file) return NextResponse.json({ error: "No file" }, { status: 400 });
 
     try {
         await connectToDatabase();
@@ -18,23 +16,12 @@ export async function POST(req: Request) {
         do {
             code = Math.floor(1000 + Math.random() * 9000).toString();
         } while (await SharedFile.findOne({ code }));
-        const fileBuffer = Buffer.from(await file.arrayBuffer());
 
-        const compressedFile = zlib.gzipSync(fileBuffer);
+        const compressed = zlib.gzipSync(Buffer.from(await file.arrayBuffer()));
 
-        await SharedFile.create({
-            code,
-            fileName: file.name,
-            fileData: compressedFile,
-            mimeType: file.type,
-        });
-
+        await SharedFile.create({ code, fileName: file.name, fileData: compressed, mimeType: file.type });
         return NextResponse.json({ code });
-    } catch (error) {
-        console.error("Error uploading file:", error);
-        return NextResponse.json(
-            { error: "Failed to upload the file." },
-            { status: 500 }
-        );
+    } catch (_e) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        return NextResponse.json({ error: "Upload failed" }, { status: 500 });
     }
 }

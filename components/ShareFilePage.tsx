@@ -15,11 +15,7 @@ export const ShareFilePage = () => {
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setIsDragActive(true);
-    } else if (e.type === "dragleave") {
-      setIsDragActive(false);
-    }
+    setIsDragActive(e.type === "dragenter" || e.type === "dragover");
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -62,12 +58,15 @@ export const ShareFilePage = () => {
         const data = await response.json();
         setCode(data.code);
       } else {
-        const data = await response.json();
-        setError(data.error || "Failed to upload file");
+        try {
+          const data = await response.json();
+          setError(data.error || "Upload failed");
+        } catch (_e) { // eslint-disable-line @typescript-eslint/no-unused-vars
+          setError("Upload failed");
+        }
       }
-    } catch (err) {
-      console.error("Error uploading file:", err);
-      setError("Error uploading file. Please try again.");
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      setError("Upload failed");
     } finally {
       setIsLoading(false);
     }
@@ -175,11 +174,10 @@ export const ShareFilePage = () => {
                           onDragOver={handleDrag}
                           onDrop={handleDrop}
                           whileHover={{ scale: 1.02 }}
-                          className={`relative border-2 border-dashed rounded-xl p-12 transition-all cursor-pointer ${
-                            isDragActive
+                          className={`relative border-2 border-dashed rounded-xl p-12 transition-all cursor-pointer ${isDragActive
                               ? "border-purple-500 bg-purple-50"
                               : "border-gray-300 bg-gray-50 hover:border-purple-400"
-                          }`}
+                            }`}
                           onClick={() => fileInputRef.current?.click()}
                         >
                           <input
@@ -197,9 +195,8 @@ export const ShareFilePage = () => {
                             >
                               <FileUp
                                 size={48}
-                                className={`transition-colors ${
-                                  isDragActive ? "text-purple-600" : "text-gray-400"
-                                }`}
+                                className={`transition-colors ${isDragActive ? "text-purple-600" : "text-gray-400"
+                                  }`}
                               />
                             </motion.div>
                             <div className="text-center">
@@ -280,11 +277,10 @@ export const ShareFilePage = () => {
                         disabled={isLoading || !file}
                         whileHover={{ scale: file && !isLoading ? 1.05 : 1 }}
                         whileTap={{ scale: file && !isLoading ? 0.95 : 1 }}
-                        className={`w-full py-4 px-6 font-bold text-lg rounded-lg transition-all flex items-center justify-center gap-2 ${
-                          file && !isLoading
+                        className={`w-full py-4 px-6 font-bold text-lg rounded-lg transition-all flex items-center justify-center gap-2 ${file && !isLoading
                             ? "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg hover:shadow-xl"
                             : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                        }`}
+                          }`}
                       >
                         {isLoading ? (
                           <>
@@ -349,11 +345,10 @@ export const ShareFilePage = () => {
                         onClick={handleCopy}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`inline-flex items-center gap-2 px-8 py-3 font-semibold rounded-lg transition-all ${
-                          copied
+                        className={`inline-flex items-center gap-2 px-8 py-3 font-semibold rounded-lg transition-all ${copied
                             ? "bg-green-100 text-green-700"
                             : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white hover:shadow-lg"
-                        }`}
+                          }`}
                       >
                         <motion.div
                           animate={{ scale: copied ? 1.2 : 1 }}

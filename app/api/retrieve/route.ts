@@ -8,16 +8,10 @@ export async function POST(req: Request) {
 
     try {
         await connectToDatabase();
-
         const result = await SharedText.findOne({ code });
-
-        if (!result) {
-            return NextResponse.json({ error: "Code not found or expired" }, { status: 404 });
-        }
-
+        if (!result) return NextResponse.json({ error: "Not found" }, { status: 404 });
         return NextResponse.json({ content: result.content });
-    } catch (error) {
-        console.error(error);
-        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    } catch (_e) { // eslint-disable-line @typescript-eslint/no-unused-vars
+        return NextResponse.json({ error: "Error" }, { status: 500 });
     }
 }

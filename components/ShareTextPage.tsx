@@ -3,23 +3,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Copy, Check, Loader } from "lucide-react";
 
+const EXPIRY_MS = 15 * 60 * 1000;
+
 export const ShareTextPage = () => {
-  const [text, setText] = useState<string>("");
-  const [code, setCode] = useState<string>("");
+  const [text, setText] = useState("");
+  const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [codeCreatedAt, setCodeCreatedAt] = useState<number | null>(null);
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const CODE_EXPIRY_TIME = 15 * 60 * 1000; // 15 minutes in milliseconds
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Check if code has expired
-  const isCodeExpired = (): boolean => {
-    if (!codeCreatedAt) return true;
-    return Date.now() - codeCreatedAt > CODE_EXPIRY_TIME;
-  };
+  const isExpired = () => codeCreatedAt && Date.now() - codeCreatedAt > EXPIRY_MS;
 
-  // Auto-generate or update code
   const generateOrUpdateCode = async (textContent: string) => {
     if (!textContent.trim()) {
       setCode("");
@@ -31,107 +27,54 @@ export const ShareTextPage = () => {
     setError("");
 
     try {
-      // If code already exists, always update it (even if expired, generate new first then update)
-      if (code) {
-        // Check if expired - if so, generate new code instead of updating
-        if (isCodeExpired()) {
-          // Code expired, generate new one
-          const response = await fetch("/api/share", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content: textContent }),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            setCode(data.code);
-            setCodeCreatedAt(Date.now());
-          } else {
-            try {
-              const data = await response.json();
-              setError(data.error || "Failed to generate code");
-            } catch {
-              setError("Failed to generate code");
-            }
-          }
-        } else {
-          // Code still valid, just update the content
-          const response = await fetch(`/api/share/${code}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ content: textContent }),
-          });
-
-          if (!response.ok) {
-            try {
-              const data = await response.json();
-              setError(data.error || "Failed to update code");
-            } catch {
-              setError("Failed to update code");
-            }
-          }
-        }
+      if (code && !isExpired()) {
+        const res = await fetch(`/api/share/${code}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content: textContent }),
+        });
+        if (!res.ok) setError("Failed to update");
       } else {
-        // No code yet, generate one
-        const response = await fetch("/api/share", {
+        const res = await fetch("/api/share", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ content: textContent }),
         });
-
-        if (response.ok) {
-          const data = await response.json();
-          setCode(data.code);
+        if (res.ok) {
+          const { code: newCode } = await res.json();
+          setCode(newCode);
           setCodeCreatedAt(Date.now());
         } else {
-          try {
-            const data = await response.json();
-            setError(data.error || "Failed to generate code");
-          } catch {
-            setError("Failed to generate code");
-          }
+          setError("Failed to generate code");
         }
       }
-    } catch (err) {
-      console.error("Error with code:", err);
-      setError("Error generating code. Please try again.");
+    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      setError("Something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Handle text input with debouncing
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newText = e.target.value;
-    setText(newText);
+    setText(e.target.value);
     setError("");
-
-    // Clear previous debounce timer
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-
-    // Set new debounce timer (1 second)
-    debounceTimerRef.current = setTimeout(() => {
-      generateOrUpdateCode(newText);
-    }, 1000);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => generateOrUpdateCode(e.target.value), 1000);
   };
 
-  // Cleanup timer on unmount
   useEffect(() => {
     return () => {
-      if (debounceTimerRef.current) {
-        clearTimeout(debounceTimerRef.current);
-      }
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
 
-  const handleCopy = () => {
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(code).then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      });
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (_e) { // eslint-disable-line @typescript-eslint/no-unused-vars
+      // clipboard failed
     }
   };
 
@@ -140,9 +83,7 @@ export const ShareTextPage = () => {
     setCode("");
     setCodeCreatedAt(null);
     setError("");
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
+    if (timerRef.current) clearTimeout(timerRef.current);
   };
 
   const containerVariants = {
@@ -304,11 +245,10 @@ export const ShareTextPage = () => {
                             onClick={handleCopy}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className={`inline-flex items-center gap-2 px-6 py-2 font-semibold rounded-lg transition-all text-sm ${
-                              copied
+                            className={`inline-flex items-center gap-2 px-6 py-2 font-semibold rounded-lg transition-all text-sm ${copied
                                 ? "bg-green-100 text-green-700"
                                 : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white hover:shadow-lg"
-                            }`}
+                              }`}
                           >
                             <motion.div
                               animate={{ scale: copied ? 1.2 : 1 }}
