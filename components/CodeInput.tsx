@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRetrieveContent } from "@/hooks/index";
 import { FileGet, GetText } from "./index";
 
@@ -25,7 +26,9 @@ export const CodeInput = () => {
         </div>
 
         <div className="flex justify-center gap-2 mb-8">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             className={`px-6 py-2 font-semibold rounded-lg transition duration-300 ${view === "code"
                 ? "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg"
                 : "bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -33,8 +36,10 @@ export const CodeInput = () => {
             onClick={() => setView("code")}
           >
             Get Text
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             className={`px-6 py-2 font-semibold rounded-lg transition duration-300 ${view === "file"
                 ? "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg"
                 : "bg-gray-200 text-gray-600 hover:bg-gray-300"
@@ -42,11 +47,19 @@ export const CodeInput = () => {
             onClick={() => setView("file")}
           >
             Get File
-          </button>
+          </motion.button>
         </div>
 
+        <AnimatePresence mode="wait">
         {view === "code" ? (
-          <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
+          <motion.div
+            key="code-view"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg"
+          >
             <div className="bg-white rounded-lg p-8">
               {!content ? (
                 <>
@@ -78,16 +91,32 @@ export const CodeInput = () => {
                 <GetText content={content} />
               )}
             </div>
-          </div>
+          </motion.div>
         ) : (
-          <FileGet />
+          <motion.div
+            key="file-view"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            <FileGet />
+          </motion.div>
         )}
+        </AnimatePresence>
 
+        <AnimatePresence>
         {error && (
-          <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow"
+          >
             <p className="text-center font-medium">{error}</p>
-          </div>
+          </motion.div>
         )}
+        </AnimatePresence>
       </div>
     </main>
   );

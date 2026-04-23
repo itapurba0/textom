@@ -1,72 +1,12 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Copy, Check, Loader } from "lucide-react";
-
-const EXPIRY_MS = 15 * 60 * 1000;
+import { useShareText } from "@/hooks/index";
 
 export const ShareTextPage = () => {
-  const [text, setText] = useState("");
-  const [code, setCode] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { text, code, handleTextChange, isLoading, error, handleReset } = useShareText();
   const [copied, setCopied] = useState(false);
-  const [codeCreatedAt, setCodeCreatedAt] = useState<number | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const isExpired = () => codeCreatedAt && Date.now() - codeCreatedAt > EXPIRY_MS;
-
-  const generateOrUpdateCode = async (textContent: string) => {
-    if (!textContent.trim()) {
-      setCode("");
-      setCodeCreatedAt(null);
-      return;
-    }
-
-    setIsLoading(true);
-    setError("");
-
-    try {
-      if (code && !isExpired()) {
-        const res = await fetch(`/api/share/${code}`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: textContent }),
-        });
-        if (!res.ok) setError("Failed to update");
-      } else {
-        const res = await fetch("/api/share", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ content: textContent }),
-        });
-        if (res.ok) {
-          const { code: newCode } = await res.json();
-          setCode(newCode);
-          setCodeCreatedAt(Date.now());
-        } else {
-          setError("Failed to generate code");
-        }
-      }
-    } catch (_err) { // eslint-disable-line @typescript-eslint/no-unused-vars
-      setError("Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
-    setError("");
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => generateOrUpdateCode(e.target.value), 1000);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
 
   const handleCopy = async () => {
     try {
@@ -76,14 +16,6 @@ export const ShareTextPage = () => {
     } catch (_e) { // eslint-disable-line @typescript-eslint/no-unused-vars
       // clipboard failed
     }
-  };
-
-  const handleReset = () => {
-    setText("");
-    setCode("");
-    setCodeCreatedAt(null);
-    setError("");
-    if (timerRef.current) clearTimeout(timerRef.current);
   };
 
   const containerVariants = {
@@ -246,8 +178,8 @@ export const ShareTextPage = () => {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             className={`inline-flex items-center gap-2 px-6 py-2 font-semibold rounded-lg transition-all text-sm ${copied
-                                ? "bg-green-100 text-green-700"
-                                : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white hover:shadow-lg"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white hover:shadow-lg"
                               }`}
                           >
                             <motion.div

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const FileGet = () => {
     const [code, setCode] = useState<string>("");
@@ -46,7 +47,12 @@ export const FileGet = () => {
 
     return (
         <main className="w-full max-w-2xl">
-            <div className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-1 rounded-lg shadow-lg"
+            >
                 <div className="bg-white rounded-lg p-8">
                     <label
                         className="block text-gray-700 text-base font-semibold mb-4"
@@ -55,7 +61,8 @@ export const FileGet = () => {
                         Enter Code
                     </label>
                     <div className="flex flex-col sm:flex-row gap-3">
-                        <input
+                        <motion.input
+                            whileFocus={{ scale: 1.02 }}
                             type="text"
                             id="code"
                             value={code}
@@ -64,21 +71,30 @@ export const FileGet = () => {
                             placeholder="Enter your code (e.g., 1234)"
                             className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         />
-                        <button
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={handleDownload}
                             className="px-6 py-3 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition duration-300 whitespace-nowrap"
                         >
                             Download
-                        </button>
+                        </motion.button>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
+            <AnimatePresence>
             {error && (
-                <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow">
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow"
+                >
                     <p className="text-center font-medium">{error}</p>
-                </div>
+                </motion.div>
             )}
+            </AnimatePresence>
         </main>
     );
 };
